@@ -1,5 +1,7 @@
 package com.platformer;
 
+import GameState.GameStateManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -9,9 +11,9 @@ import java.awt.image.BufferedImage;
 public class GamePanel extends JPanel
 implements Runnable, KeyListener {
 
-    public static final int WIDTH = 800;
-    public static final int HEIGHT = 600;
-    public static final int SCALE = 1;
+    public static final int WIDTH = 320;
+    public static final int HEIGHT = 240;
+    public static final int SCALE = 3;
 
     private Thread thread;
     private boolean running;
@@ -21,6 +23,7 @@ implements Runnable, KeyListener {
     private BufferedImage image;
     private Graphics2D g;
 
+    private GameStateManager gameStateManager;
 
     GamePanel(){
         super();
@@ -50,12 +53,16 @@ implements Runnable, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        gameStateManager.keyPressed(
+                e.getKeyCode()
+        );
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-
+        gameStateManager.keyReleased(
+                e.getKeyCode()
+        );
     }
 
     private void init(){
@@ -64,8 +71,11 @@ implements Runnable, KeyListener {
                 HEIGHT,
                 BufferedImage.TYPE_INT_RGB
         );
-        g = (Graphics2D) g;
+        g = (Graphics2D) image.getGraphics();
         running = true;
+
+        gameStateManager = new GameStateManager();
+
 
     }
 
@@ -99,11 +109,11 @@ implements Runnable, KeyListener {
 
 
     public void update() {
-
+        gameStateManager.update();
     }
 
     public void draw(){
-
+        gameStateManager.draw(g);
     }
 
     public void drawToScreen(){
@@ -112,6 +122,8 @@ implements Runnable, KeyListener {
                 image,
                 0,
                 0,
+                WIDTH * SCALE,
+                HEIGHT * SCALE,
                 null);
         g2.dispose();
     }
