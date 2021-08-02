@@ -1,6 +1,8 @@
 package GameState;
 
 import TileMap.TileMap;
+import TileMap.Background;
+
 import com.platformer.GamePanel;
 
 import java.awt.*;
@@ -8,6 +10,7 @@ import java.awt.*;
 public class Level1State extends GameState {
 
     private TileMap tileMap;
+    private Background background;
 
     Level1State(
             GameStateManager gameStateManager){
@@ -21,7 +24,10 @@ public class Level1State extends GameState {
         tileMap.loadMap("D:\\david\\JavaPlatformer\\Resources\\Maps\\level1-1.map");
         tileMap.setPosition(0, 0);
 
-
+        background = new Background(
+          "D:\\david\\JavaPlatformer\\Resources\\Backgrounds\\grassbg1.gif",
+          0.1
+        );
     }
 
     public void update(){
@@ -29,12 +35,9 @@ public class Level1State extends GameState {
     }
 
     public void draw(Graphics2D g){
-        g.setColor(Color.WHITE);
-        g.fillRect(
-                0,
-                0,
-                GamePanel.WIDTH,
-                GamePanel.HEIGHT);
+
+        background.draw(g);
+
         tileMap.draw(g);
     }
 
