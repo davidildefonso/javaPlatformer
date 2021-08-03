@@ -1,5 +1,8 @@
 package GameState;
 
+import Entity.Enemies.Slugger;
+import Entity.Enemy;
+import Entity.HUD;
 import Entity.Player;
 import TileMap.TileMap;
 import TileMap.Background;
@@ -8,6 +11,7 @@ import com.platformer.GamePanel;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class Level1State extends GameState {
 
@@ -15,6 +19,10 @@ public class Level1State extends GameState {
     private Background background;
 
     private Player player;
+
+    private ArrayList<Enemy> enemies;
+
+    private HUD hud;
 
     Level1State(
             GameStateManager gameStateManager){
@@ -36,6 +44,14 @@ public class Level1State extends GameState {
 
         player = new Player(tileMap);
         player.setPosition(100, 100);
+
+        enemies = new ArrayList<Enemy>();
+        Slugger s;
+        s = new Slugger(tileMap);
+        s.setPosition(100,100);
+        enemies.add(s);
+
+        hud = new HUD(player);
     }
 
     public void update(){
@@ -46,6 +62,16 @@ public class Level1State extends GameState {
                 GamePanel.HEIGHT/2 -
                         player.getY()
         );
+
+        background.setPosition(
+                tileMap.getX(),
+                tileMap.getY()
+        );
+
+        for (int i = 0; i < enemies.size() ; i++) {
+            enemies.get(i).update();
+        }
+
     }
 
     public void draw(Graphics2D g){
@@ -55,6 +81,12 @@ public class Level1State extends GameState {
         tileMap.draw(g);
 
         player.draw(g);
+
+        for (int i = 0; i < enemies.size() ; i++) {
+            enemies.get(i).draw(g);
+        }
+
+        hud.draw(g);
     }
 
     public void keyPressed(int k){

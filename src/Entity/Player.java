@@ -279,23 +279,7 @@ public class Player extends  MapObject{
             }
         }
 
-        if(facingRight){
-            g.drawImage(
-                    animation.getImage(),
-                    (int)(x + xMap -width/2),
-                    (int)(y + yMap - height/2),
-                    null
-            );
-        }else{
-            g.drawImage(
-                    animation.getImage(),
-                    (int)(x + xMap -width/2 + width),
-                    (int)(y + yMap - height/2),
-                    -width,
-                    height,
-                    null
-            );
-        }
+        super.draw(g);
 
 
 
@@ -328,39 +312,39 @@ public class Player extends  MapObject{
             }
         }
 
-    if((currentAction == SCRATCHING ||
-    currentAction == FIREBALL) &&
-    !(jumping || falling)){
-        dx = 0;
-    }
-
-    if(jumping && !falling){
-        dy = jumpStart;
-        falling = true;
-    }
-
-    if(falling){
-        if(dy > 0 && gliding){
-            dy += fallSpeed * 0.1;
-        }else{
-            dy += fallSpeed;
+        if((currentAction == SCRATCHING ||
+        currentAction == FIREBALL) &&
+        !(jumping || falling)){
+            dx = 0;
         }
 
-        if(dy > 0) jumping = false;
-
-        if(dy < 0 && !jumping){
-            dy += stopJumpSpeed;
+        if(jumping && !falling){
+            dy = jumpStart;
+            falling = true;
         }
 
-        if(dy > maxFallSpeed){
-            dy = maxFallSpeed;
+        if(falling){
+            if(dy > 0 && gliding){
+                dy += fallSpeed * 0.1;
+            }else{
+                dy += fallSpeed;
+            }
+
+            if(dy > 0) jumping = false;
+
+            if(dy < 0 && !jumping){
+                dy += stopJumpSpeed;
+            }
+
+            if(dy > maxFallSpeed){
+                dy = maxFallSpeed;
+            }
+
+
+
+
+
         }
-
-
-
-
-
-    }
 
 
 
