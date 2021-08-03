@@ -138,7 +138,7 @@ public abstract class MapObject {
         }
 
         if(dy > 0){
-            if(bottomRight || bottomLeft){
+            if(bottomLeft || bottomRight ){
                 dy = 0;
                 falling = false;
                 yTemp =
@@ -167,7 +167,7 @@ public abstract class MapObject {
         }
 
         if(dx > 0){
-            if(bottomRight || topRight){
+            if( topRight || bottomRight){
                 dx = 0;
                 xTemp =
                         (currentCol + 1)

@@ -41,7 +41,7 @@ public class Background {
                 % GamePanel.WIDTH;
         this.y = (y * moveScale)
                 % GamePanel.HEIGHT;
-        this.y = y;
+       // this.y = y;
     }
 
     public void setVector(double dx, double dy){

@@ -117,6 +117,11 @@ public class TileMap {
             width = numCols * tileSize;
             height = numRows * tileSize;
 
+            xMin = GamePanel.WIDTH - width;
+            xMax = 0;
+            yMin = GamePanel.HEIGHT - height;
+            yMax = 0;
+
             String delims = "\\s+";
 
             for (int row = 0;
@@ -231,7 +236,9 @@ public class TileMap {
         }
     }
 
-
+    public void setTween(double t){
+        tween = t;
+    }
 
 
 
