@@ -355,6 +355,7 @@ public class Player extends  MapObject{
         health -= damage;
         if(health < 0) health = 0;
         if(health == 0) dead = true;
+        flinching = true;
         flinchTimer = System.nanoTime();
 
     }
