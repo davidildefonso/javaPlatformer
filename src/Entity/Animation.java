@@ -12,7 +12,7 @@ public class Animation {
 
     private boolean playedOnce;
 
-    public void Animation(){
+    Animation(){
         playedOnce = false;
     }
 
