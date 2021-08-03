@@ -187,6 +187,14 @@ public class Player extends  MapObject{
         }
 
 
+        if(flinching){
+            long elapsed = (System.nanoTime()
+            - flinchTimer)/1000000;
+            if(elapsed > 1000){
+                flinching  = false;
+            }
+        }
+
         if(scratching){
             if(currentAction != SCRATCHING){
                 currentAction = SCRATCHING;
@@ -286,6 +294,70 @@ public class Player extends  MapObject{
 
     }
 
+
+    public void checkAttack(
+            ArrayList<Enemy> enemies
+    ){
+
+        for (int i = 0; i < enemies.size() ; i++) {
+            Enemy e = enemies.get(i);
+            if(scratching){
+                if(facingRight){
+                    if(e.getX() > x &&
+                            e.getX() < x + scratchRange &&
+                            e.getY() > y - height/2 &&
+                            e.getY() < y + height/2
+                    ){
+                        e.hit(scratchDamage);
+
+                    }
+                }else{
+                    if(
+                            e.getX() < x &&
+                            e.getX() > x - scratchRange &&
+                            e.getY() > y - height/2 &&
+                            e.getY() < y + height/2
+                    ){
+                        e.hit(scratchDamage);
+
+                    }
+                }
+
+
+            }
+
+            for (int j = 0; j < fireBalls.size() ; j++) {
+                if(fireBalls.get(j).intersects(e)){
+                    e.hit(fireBallDamage);
+                    fireBalls.get(j).setHit();
+                    break;
+
+                }
+            }
+
+
+            if(intersects(e)){
+                hit(e.getDamage());
+            }
+
+
+
+        }
+
+
+
+
+
+    }
+
+    public void hit(int damage){
+        if(flinching) return;
+        health -= damage;
+        if(health < 0) health = 0;
+        if(health == 0) dead = true;
+        flinchTimer = System.nanoTime();
+
+    }
 
     public void getNextPosition(){
         if(left){
