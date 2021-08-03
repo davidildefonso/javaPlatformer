@@ -1,6 +1,8 @@
 package Entity;
 
 import TileMap.TileMap;
+import TileMap.Tile;
+import com.platformer.GamePanel;
 
 import javax.security.sasl.RealmCallback;
 import java.awt.*;
@@ -77,6 +79,38 @@ public abstract class MapObject {
         );
     }
 
+    public void calculateCorners(
+            double x,
+            double y
+    ){
+        int leftTile =
+                (int)(x - cWidth/2)/tileSize;
+        int rightTile =
+                (int)(x + cWidth/2 - 1)/tileSize;
+        int topTile =
+                (int)(y - cHeight/2)/tileSize;
+        int bottomTile =
+                (int)(y + cHeight/2 - 1)/tileSize;
+
+        int tl = tileMap.getType(
+                topTile, leftTile
+        );
+        int tr = tileMap.getType(
+                topTile, rightTile
+        );
+        int bl = tileMap.getType(
+                bottomTile, leftTile
+        );
+        int br = tileMap.getType(
+                bottomTile, rightTile
+        );
+
+        topLeft = tl == Tile.BLOCKED;
+        topRight = tr == Tile.BLOCKED;
+        bottomLeft = bl == Tile.BLOCKED;
+        bottomRight = br == Tile.BLOCKED;
+
+    }
 
     public void checkTileMapCollision(){
         currentCol = (int)x / tileSize;
@@ -88,6 +122,123 @@ public abstract class MapObject {
         xTemp = x;
         yTemp = y;
 
+        calculateCorners(x, yDestination);
+
+        if(dy < 0){
+            if(topLeft || topRight){
+                dy = 0;
+                yTemp =
+                  currentRow * tileSize
+                          + cHeight/2;
+
+
+            }else{
+                yTemp += dy;
+            }
+        }
+
+        if(dy > 0){
+            if(bottomRight || bottomLeft){
+                dy = 0;
+                falling = false;
+                yTemp =
+                        (currentRow + 1)
+                        * tileSize
+                        -cHeight/2;
+            }else{
+                yTemp +=dy;
+            }
+        }
+
+        calculateCorners(xDestination, y);
+
+
+        if(dx < 0){
+            if(topLeft || bottomLeft){
+                dx = 0;
+                xTemp =
+                        currentCol * tileSize
+                                + cWidth/2;
+
+
+            }else{
+                xTemp += dx;
+            }
+        }
+
+        if(dx > 0){
+            if(bottomRight || topRight){
+                dx = 0;
+                xTemp =
+                        (currentCol + 1)
+                                * tileSize
+                                -cWidth/2;
+            }else{
+                xTemp +=dx;
+            }
+        }
+
+        if(!falling){
+            calculateCorners(
+                    x,
+                    yDestination + 1);
+            if(!bottomLeft && !bottomRight){
+                falling = true;
+            }
+
+        }
+
     }
+
+
+    public int getX() { return (int) x ;}
+    public int getY() { return (int) y ;}
+    public int getWidth() { return width ;}
+    public int getHeight() { return height ;}
+    public int getCWidth() { return cWidth ;}
+    public int getCHeight() { return cHeight ;}
+
+    public void setPosition(
+            double x,
+            double y
+    ){
+        this.x = x;
+        this.y = y;
+    }
+
+    public void setVector(
+            double dx,
+            double dy
+    ){
+        this.dx = dx;
+        this.dy = dy;
+    }
+
+    public void setMapPosition(){
+        xMap = tileMap.getX();
+        yMap  = tileMap.getY();
+    }
+
+    public void setLeft(boolean b){ left = b; }
+    public void setRight(boolean b){ right = b; }
+    public void setUp(boolean b){ up = b; }
+    public void setDown(boolean b){ down = b; }
+    public void setJumping(boolean b){ jumping = b; }
+
+
+    public  boolean notOnScreen(){
+        return  x + xMap + width < 0 ||
+                x+ xMap - width > GamePanel.WIDTH ||
+                y + yMap + height < 0 ||
+                y + yMap - height > GamePanel.HEIGHT;
+    }
+
+
+
+
+
+
+
+
 
 }
